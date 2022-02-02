@@ -1,0 +1,4 @@
+name: CraftersCut
+version: '${project.version}'
+main: be4rjp.crafterscut.CraftersCut
+api-version: 1.15
