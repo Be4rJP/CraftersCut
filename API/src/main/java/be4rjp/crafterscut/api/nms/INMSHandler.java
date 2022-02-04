@@ -26,6 +26,14 @@ public interface INMSHandler {
 
     Object createPlayerInfoPacket(IEntityPlayer iEntityPlayer, WrappedPlayerInfoAction info);
 
-    Object createSpawnNamedEntity(IEntityPlayer iEntityPlayer);
+    Object createSpawnNamedEntityPacket(IEntityPlayer iEntityPlayer);
+    
+    Object createTeleportPacket(IEntity iEntity);
+    
+    Object createRelEntityMoveLookPacket(IEntity iEntity, double deltaX, double deltaY, double deltaZ, float yaw, float pitch);
 
+    Object createHeadRotationPacket(IEntity iEntity, float yaw);
+    
+    Object createEntityDestroyPacket(IEntity iEntity);
+    
 }

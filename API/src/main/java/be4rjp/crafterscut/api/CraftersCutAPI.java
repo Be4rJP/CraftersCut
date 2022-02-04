@@ -14,18 +14,19 @@ public abstract class CraftersCutAPI {
 
     private static CraftersCutAPI instance;
 
-    public CraftersCutAPI(Plugin plugin, INMSHandler nmsHandler) {
-        this.plugin = plugin;
-        this.nmsHandler = nmsHandler;
-    }
-
     public static CraftersCutAPI getInstance() {return instance;}
 
 
     protected final Plugin plugin;
 
     protected final INMSHandler nmsHandler;
-
+    
+    public CraftersCutAPI(Plugin plugin, INMSHandler nmsHandler) {
+        this.plugin = plugin;
+        this.nmsHandler = nmsHandler;
+    }
+    
+    
     public Plugin getPlugin() {return plugin;}
 
     public INMSHandler getNMSHandler() {return nmsHandler;}

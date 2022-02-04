@@ -1,12 +1,12 @@
-package be4rjp.nms.v1_15_R1;
+package be4rjp.crafterscut.nms.v1_15_R1;
 
 import be4rjp.crafterscut.api.nms.INMSHandler;
 import be4rjp.crafterscut.api.nms.entity.IEntity;
 import be4rjp.crafterscut.api.nms.entity.IEntityLiving;
 import be4rjp.crafterscut.api.nms.entity.IEntityPlayer;
 import be4rjp.crafterscut.api.nms.enums.WrappedPlayerInfoAction;
-import be4rjp.nms.v1_15_R1.entity.ImplEntityArmorStand;
-import be4rjp.nms.v1_15_R1.entity.ImplEntityPlayer;
+import be4rjp.crafterscut.nms.v1_15_R1.entity.ImplEntityArmorStand;
+import be4rjp.crafterscut.nms.v1_15_R1.entity.ImplEntityPlayer;
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.Channel;
 import net.minecraft.server.v1_15_R1.*;
@@ -71,8 +71,29 @@ public class NMSHandler implements INMSHandler {
     }
 
     @Override
-    public Object createSpawnNamedEntity(IEntityPlayer iEntityPlayer) {
+    public Object createSpawnNamedEntityPacket(IEntityPlayer iEntityPlayer) {
         return new PacketPlayOutNamedEntitySpawn((EntityHuman) iEntityPlayer);
     }
-
+    
+    @Override
+    public Object createTeleportPacket(IEntity iEntity) {
+        return new PacketPlayOutEntityTeleport((Entity) iEntity);
+    }
+    
+    @Override
+    public Object createRelEntityMoveLookPacket(IEntity iEntity, double deltaX, double deltaY, double deltaZ, float yaw, float pitch) {
+        return new PacketPlayOutEntity.PacketPlayOutRelEntityMoveLook(iEntity.getId(), (short) (deltaX * 4096), (short) (deltaY * 4096), (short) (deltaZ * 4096),
+                (byte) ((yaw * 256.0F) / 360.0F), (byte) ((pitch * 256.0F) / 360.0F), true);
+    }
+    
+    @Override
+    public Object createHeadRotationPacket(IEntity iEntity, float yaw) {
+        return new PacketPlayOutEntityHeadRotation((Entity) iEntity, (byte) ((yaw * 256.0F) / 360.0F));
+    }
+    
+    @Override
+    public Object createEntityDestroyPacket(IEntity iEntity) {
+        return new PacketPlayOutEntityDestroy(iEntity.getId());
+    }
+    
 }

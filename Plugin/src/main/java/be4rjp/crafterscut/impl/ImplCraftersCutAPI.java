@@ -6,7 +6,6 @@ import org.bukkit.plugin.Plugin;
 
 public class ImplCraftersCutAPI extends CraftersCutAPI {
 
-
     public ImplCraftersCutAPI(Plugin plugin, INMSHandler nmsHandler) {
         super(plugin, nmsHandler);
     }

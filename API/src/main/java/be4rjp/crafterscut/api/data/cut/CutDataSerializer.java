@@ -1,33 +1,29 @@
 package be4rjp.crafterscut.api.data.cut;
 
-import java.util.HashMap;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Map;
 
 public class CutDataSerializer {
 
-    private final Map<String, String> dataMap = new HashMap<>();
+    private Map<String, String> dataMap;
 
     public void put(String key, String data){dataMap.put(key, data);}
 
     public String get(String key){return dataMap.get(key);}
-
-    public String serialize(){
-        StringBuilder sb = new StringBuilder();
-        boolean first = true;
-        for(Map.Entry<String, String> entry : dataMap.entrySet()){
-            if(!first) sb.append("/");
-            first = false;
-            sb.append(entry.getKey()).append(",").append(entry.getValue());
-        }
-        return sb.toString();
+    
+    public Map<String, String> getDataMap() {return dataMap;}
+    
+    public String toJson() throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(dataMap);
     }
 
-    public void deserialize(String data){
-        String[] args = data.split("/");
-        for(String arg : args){
-            String[] entry = arg.split(",");
-            dataMap.put(entry[0], entry[1]);
-        }
+    public CutDataSerializer fromJson(String json) throws Exception{
+        ObjectMapper mapper = new ObjectMapper();
+        dataMap = mapper.readValue(json, new TypeReference<Map<String, String>>(){});
+        return this;
     }
 
 }

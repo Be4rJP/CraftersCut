@@ -1,24 +1,26 @@
 package be4rjp.crafterscut.api.data.cut;
 
+import be4rjp.crafterscut.api.util.Vec2f;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.util.Vector;
 
 public abstract class EntityCut extends Cut {
-
-    protected final Int2ObjectArrayMap<Vector> deltaMap = new Int2ObjectArrayMap<>();
-    protected final Int2ObjectOpenHashMap<Vector> positionMap = new Int2ObjectOpenHashMap<>();
+    
+    protected String entityName;
+    
+    protected final Int2ObjectArrayMap<Vector> positionMap = new Int2ObjectArrayMap<>();
+    protected final Int2ObjectArrayMap<Vec2f> rotationMap = new Int2ObjectArrayMap<>();
 
     @Override
     public void detailSerialize(CutDataSerializer cutDataSerializer) {
-
+        cutDataSerializer.put("entity_name", entityName);
 
         entityDetailSerialize(cutDataSerializer);
     }
 
     @Override
     public void detailDeserializer(CutDataSerializer cutDataSerializer) {
-
+        entityName = cutDataSerializer.get("entity_name");
 
         entityDetailDeserializer(cutDataSerializer);
     }
@@ -26,61 +28,54 @@ public abstract class EntityCut extends Cut {
     public abstract void entityDetailSerialize(CutDataSerializer cutDataSerializer);
 
     public abstract void entityDetailDeserializer(CutDataSerializer cutDataSerializer);
-
-
-
+    
+    
+    public String getEntityName() {return entityName;}
+    
+    public void setEntityName(String entityName) {this.entityName = entityName;}
+    
     @Override
     public Vector getPosition(int index) {
-        Vector position = positionMap.get(index);
-        if(position != null){
-            return position;
-        }
-
-        Vector nearPosition = null;
-        int positionIndex = 0;
-        int plusIndex = 0;
-        for(int i = 1; i < positionMap.size(); i++){
-            positionIndex = index - i;
-            plusIndex = i;
-            nearPosition = positionMap.get(positionIndex);
-            if(nearPosition != null) break;
-        }
-
-        if(nearPosition == null) return null;
-
-        nearPosition = nearPosition.clone();
-        for(int i = 0; i < plusIndex; i++){
-            nearPosition.add(deltaMap.get(positionIndex + plusIndex));
-        }
-
-        return nearPosition;
+        return positionMap.get(index);
     }
-
+    
+    @Override
+    public Vec2f getRotation(int index) {
+        return rotationMap.get(index);
+    }
+    
     @Override
     public Vector getPositionDelta(int index) {
-        return deltaMap.get(index);
+        if(index == 0) return new Vector(0, 0, 0);
+        
+        Vector previous = getPosition(index - 1);
+        if(previous == null) return null;
+        
+        Vector current = getPosition(index);
+        if(current == null) return null;
+        
+        return new Vector(current.getX() - previous.getX(), current.getY() - previous.getY(), current.getZ() - previous.getZ());
     }
 
     @Override
-    public void setPosition(int index, double x, double y, double z) {
-        if(index == 0){
-            deltaMap.put(index, new Vector(0.0, 0.0, 0.0));
-            positionMap.put(index, new Vector(x, y, z));
-            return;
-        }
-
-        Vector previous = getPosition(index - 1);
-        if(previous == null) return;
-
-        if(index % 60 == 0){
-            positionMap.put(index, new Vector(x, y, z));
-        }
-
-        deltaMap.put(index, new Vector(x - previous.getX(), y - previous.getY(), z - previous.getZ()));
+    public void setPositionRotation(int index, double x, double y, double z, float yaw, float pitch) {
+        positionMap.put(index, new Vector(x, y, z));
+        rotationMap.put(index, new Vec2f(yaw, pitch));
     }
 
     @Override
     public Vector getFirstPosition() {
-        return null;
+        if(positionMap.size() == 0){
+            return null;
+        }
+        return positionMap.get(0);
+    }
+    
+    @Override
+    public Vec2f getFirstRotation() {
+        if(rotationMap.size() == 0){
+            return null;
+        }
+        return rotationMap.get(0);
     }
 }
