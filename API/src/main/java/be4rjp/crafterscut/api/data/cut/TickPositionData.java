@@ -1,4 +1,4 @@
-package be4rjp.crafterscut.api.data;
+package be4rjp.crafterscut.api.data.cut;
 
 import org.bukkit.util.Vector;
 
@@ -10,4 +10,5 @@ public interface TickPositionData {
 
     void setPosition(int index, double x, double y, double z);
 
+    Vector getFirstPosition();
 }

@@ -1,9 +1,9 @@
-package be4rjp.crafterscut.api.data;
+package be4rjp.crafterscut.api.data.cut;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CutSerializer {
+public class CutDataSerializer {
 
     private final Map<String, String> dataMap = new HashMap<>();
 

@@ -1,4 +1,4 @@
-package be4rjp.crafterscut.api.data;
+package be4rjp.crafterscut.api.data.cut;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -9,21 +9,23 @@ public abstract class EntityCut extends Cut {
     protected final Int2ObjectArrayMap<Vector> deltaMap = new Int2ObjectArrayMap<>();
     protected final Int2ObjectOpenHashMap<Vector> positionMap = new Int2ObjectOpenHashMap<>();
 
-
     @Override
-    public CutSerializer serialize() {
-        CutSerializer cutSerializer = new CutSerializer();
-        return cutSerializer;
+    public void detailSerialize(CutDataSerializer cutDataSerializer) {
+
+
+        entityDetailSerialize(cutDataSerializer);
     }
 
     @Override
-    public void deserialize(CutSerializer cutSerializer) {
+    public void detailDeserializer(CutDataSerializer cutDataSerializer) {
 
+
+        entityDetailDeserializer(cutDataSerializer);
     }
 
-    public abstract void detailSerialize(CutSerializer cutSerializer);
+    public abstract void entityDetailSerialize(CutDataSerializer cutDataSerializer);
 
-    public abstract void detailDeserializer(CutSerializer cutSerializer);
+    public abstract void entityDetailDeserializer(CutDataSerializer cutDataSerializer);
 
 
 
@@ -75,5 +77,10 @@ public abstract class EntityCut extends Cut {
         }
 
         deltaMap.put(index, new Vector(x - previous.getX(), y - previous.getY(), z - previous.getZ()));
+    }
+
+    @Override
+    public Vector getFirstPosition() {
+        return null;
     }
 }
