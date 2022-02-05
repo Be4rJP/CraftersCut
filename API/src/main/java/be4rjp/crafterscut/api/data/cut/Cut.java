@@ -1,5 +1,6 @@
 package be4rjp.crafterscut.api.data.cut;
 
+import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.SerializableData;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
@@ -28,27 +29,29 @@ public abstract class Cut implements TickPositionData, SerializableData {
 
 
     @Override
-    public CutDataSerializer serialize() {
-        CutDataSerializer cutDataSerializer = new CutDataSerializer();
-        cutDataSerializer.put("name", name);
-        cutDataSerializer.put("start_tick", String.valueOf(startTick));
-        cutDataSerializer.put("end_tick", String.valueOf(endTick));
+    public DataSerializer serialize() {
+        DataSerializer dataSerializer = new DataSerializer();
+        dataSerializer.put("name", name);
+        dataSerializer.put("start_tick", String.valueOf(startTick));
+        dataSerializer.put("end_tick", String.valueOf(endTick));
 
-        detailSerialize(cutDataSerializer);
+        detailSerialize(dataSerializer);
 
-        return cutDataSerializer;
+        return dataSerializer;
     }
 
     @Override
-    public void deserialize(CutDataSerializer cutDataSerializer) {
-        this.name = cutDataSerializer.get("name");
-        this.startTick = Integer.parseInt(cutDataSerializer.get("start_tick"));
-        this.endTick = Integer.parseInt(cutDataSerializer.get("end_tick"));
+    public void deserialize(DataSerializer dataSerializer) {
+        this.name = dataSerializer.get("name");
+        this.startTick = Integer.parseInt(dataSerializer.get("start_tick"));
+        this.endTick = Integer.parseInt(dataSerializer.get("end_tick"));
+        
+        detailDeserializer(dataSerializer);
     }
 
-    public abstract void detailSerialize(CutDataSerializer cutDataSerializer);
+    public abstract void detailSerialize(DataSerializer dataSerializer);
 
-    public abstract void detailDeserializer(CutDataSerializer cutDataSerializer);
+    public abstract void detailDeserializer(DataSerializer dataSerializer);
 
 
     public Vector getTickPosition(int tick){

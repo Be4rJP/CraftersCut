@@ -2,7 +2,7 @@ package be4rjp.crafterscut.api.data.movie;
 
 import be4rjp.crafterscut.api.data.SerializableData;
 import be4rjp.crafterscut.api.data.cut.Cut;
-import be4rjp.crafterscut.api.data.cut.CutDataSerializer;
+import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.cut.DataType;
 
 import java.util.ArrayList;
@@ -25,19 +25,23 @@ public class Movie implements SerializableData {
 
     public String getWorldName() {return worldName;}
     
+    public void setName(String name) {this.name = name;}
+    
+    public void setWorldName(String worldName) {this.worldName = worldName;}
+    
     @Override
-    public CutDataSerializer serialize() throws Exception {
-        CutDataSerializer serializer = new CutDataSerializer();
+    public DataSerializer serialize() throws Exception {
+        DataSerializer serializer = new DataSerializer();
         serializer.put("name", name);
         serializer.put("world_name", worldName);
         for(Cut cut : cutList){
-            serializer.put("cut_" + cut.getType().toString() + "_" + cut.getName(), cut.serialize().toJson());
+            serializer.put("cut_" + cut.getType().getSerializeNumber() + "_" + cut.getName(), cut.serialize().toJson());
         }
         return serializer;
     }
     
     @Override
-    public void deserialize(CutDataSerializer serializer) throws Exception {
+    public void deserialize(DataSerializer serializer) throws Exception {
         this.name = serializer.get("name");
         this.worldName = serializer.get("world_name");
         
@@ -48,10 +52,11 @@ public class Movie implements SerializableData {
             if(!key.contains("cut_")) continue;
             
             String[] args = key.split("_");
-            DataType dataType = DataType.valueOf(args[1]);
+            DataType dataType = DataType.getFromSerializeNumber(Integer.parseInt(args[1]));
             
             Cut cut = dataType.createInstance();
-            cut.deserialize(new CutDataSerializer().fromJson(value));
+            cut.deserialize(new DataSerializer().fromJson(value));
+            cutList.add(cut);
         }
     }
 }

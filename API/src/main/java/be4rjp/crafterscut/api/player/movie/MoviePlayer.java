@@ -34,7 +34,7 @@ public class MoviePlayer extends BukkitRunnable {
         this.cutPlayerList = new ArrayList<>();
         for(Cut cut : movie.getCutList()){
             cutPlayerList.add(cut.createCutPlayerInstance(this));
-            endTick = cut.getEndTick();
+            endTick = Math.max(endTick, cut.getEndTick());
         }
     }
 
@@ -78,7 +78,7 @@ public class MoviePlayer extends BukkitRunnable {
     @Override
     public void run() {
         try{
-            cutPlayerList.forEach(cutPlayer -> cutPlayer.playTick(tick));
+            playTick(tick);
         }catch (Exception e){
             if(exceptionConsumer == null){
                 e.printStackTrace();
@@ -90,6 +90,7 @@ public class MoviePlayer extends BukkitRunnable {
         }
 
         if(tick == endTick){
+            audience.sendMessage("play end");
             cancel();
             return;
         }

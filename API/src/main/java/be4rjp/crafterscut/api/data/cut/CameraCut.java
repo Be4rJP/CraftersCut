@@ -1,5 +1,6 @@
 package be4rjp.crafterscut.api.data.cut;
 
+import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.util.Vec2f;
@@ -38,12 +39,12 @@ public class CameraCut extends Cut {
     }
     
     @Override
-    public void detailSerialize(CutDataSerializer cutDataSerializer) {
+    public void detailSerialize(DataSerializer dataSerializer) {
 
     }
 
     @Override
-    public void detailDeserializer(CutDataSerializer cutDataSerializer) {
+    public void detailDeserializer(DataSerializer dataSerializer) {
 
     }
 

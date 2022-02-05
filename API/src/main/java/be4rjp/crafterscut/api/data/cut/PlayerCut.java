@@ -1,5 +1,6 @@
 package be4rjp.crafterscut.api.data.cut;
 
+import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.player.cut.PlayerCutPlayer;
@@ -11,20 +12,24 @@ public class PlayerCut extends EntityCut {
     protected String skinSignature;
 
     @Override
-    public void entityDetailSerialize(CutDataSerializer cutDataSerializer) {
-        cutDataSerializer.put("skin_value", skinValue);
-        cutDataSerializer.put("skin_signature", skinSignature);
+    public void entityDetailSerialize(DataSerializer dataSerializer) {
+        dataSerializer.put("skin_value", skinValue);
+        dataSerializer.put("skin_signature", skinSignature);
     }
 
     @Override
-    public void entityDetailDeserializer(CutDataSerializer cutDataSerializer) {
-        skinValue = cutDataSerializer.get("skin_value");
-        skinSignature = cutDataSerializer.get("skin_signature");
+    public void entityDetailDeserializer(DataSerializer dataSerializer) {
+        skinValue = dataSerializer.get("skin_value");
+        skinSignature = dataSerializer.get("skin_signature");
     }
     
     public String getSkinValue() {return skinValue;}
     
     public String getSkinSignature() {return skinSignature;}
+    
+    public void setSkinValue(String skinValue) {this.skinValue = skinValue;}
+    
+    public void setSkinSignature(String skinSignature) {this.skinSignature = skinSignature;}
     
     @Override
     public CutPlayer<PlayerCut> createCutPlayerInstance(MoviePlayer moviePlayer) {
@@ -32,7 +37,5 @@ public class PlayerCut extends EntityCut {
     }
     
     @Override
-    public DataType getType() {
-        return DataType.ENTITY_PLAYER_CUT;
-    }
+    public DataType getType() {return DataType.ENTITY_PLAYER_CUT;}
 }
