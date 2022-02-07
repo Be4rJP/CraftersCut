@@ -7,9 +7,13 @@ import be4rjp.crafterscut.api.data.movie.Movie;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.recorder.EntityCutRecorder;
 import be4rjp.crafterscut.api.util.SkinManager;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import be4rjp.crafterscut.api.util.Spline2D;
+import be4rjp.crafterscut.api.util.Vec2d;
 import com.google.common.io.Files;
+import org.bukkit.Color;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestEventListener implements Listener {
@@ -26,6 +31,8 @@ public class TestEventListener implements Listener {
     private static final Movie movie;
     private static PlayerCut playerCut;
     private static EntityCutRecorder recorder;
+    
+    private static final List<Vec2d> nodes = new ArrayList<>();
     
     static {
         movie = new Movie();
@@ -93,6 +100,16 @@ public class TestEventListener implements Listener {
                 filewriter.close();
             }catch (Exception e){e.printStackTrace();}
             
+        }
+    
+        if(itemStack.getType() == Material.LAPIS_LAZULI){
+            Location loc = player.getLocation();
+    
+    
+    
+            //Location location = loc.clone().add(x, y, 0.0);
+            //Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
+            //player.spawnParticle(Particle.REDSTONE, location, 0, 0, 0, 0, dustOptions);
         }
     }
     
