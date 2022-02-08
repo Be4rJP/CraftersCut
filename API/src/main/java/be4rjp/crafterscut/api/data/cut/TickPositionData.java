@@ -1,6 +1,6 @@
 package be4rjp.crafterscut.api.data.cut;
 
-import be4rjp.crafterscut.api.util.Vec2f;
+import be4rjp.crafterscut.api.util.math.Vec2f;
 import org.bukkit.util.Vector;
 
 public interface TickPositionData {

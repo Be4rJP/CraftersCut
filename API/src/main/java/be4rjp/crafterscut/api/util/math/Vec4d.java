@@ -1,4 +1,4 @@
-package be4rjp.crafterscut.api.util;
+package be4rjp.crafterscut.api.util.math;
 
 public class Vec4d {
     

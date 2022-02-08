@@ -1,7 +1,7 @@
 package be4rjp.crafterscut.api.data.cut;
 
 import be4rjp.crafterscut.api.data.DataSerializer;
-import be4rjp.crafterscut.api.util.Vec2f;
+import be4rjp.crafterscut.api.util.math.Vec2f;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import org.bukkit.util.Vector;
 

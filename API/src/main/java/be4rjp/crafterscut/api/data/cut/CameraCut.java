@@ -3,7 +3,7 @@ package be4rjp.crafterscut.api.data.cut;
 import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
-import be4rjp.crafterscut.api.util.Vec2f;
+import be4rjp.crafterscut.api.util.math.Vec2f;
 import org.bukkit.util.Vector;
 
 public class CameraCut extends Cut {

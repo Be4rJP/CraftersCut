@@ -7,8 +7,8 @@ import be4rjp.crafterscut.api.data.movie.Movie;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.recorder.EntityCutRecorder;
 import be4rjp.crafterscut.api.util.SkinManager;
-import be4rjp.crafterscut.api.util.Spline2D;
-import be4rjp.crafterscut.api.util.Vec2d;
+import be4rjp.crafterscut.api.util.math.BezierCurve3D;
+import be4rjp.crafterscut.api.util.math.Vec2d;
 import com.google.common.io.Files;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -19,6 +19,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,6 +35,8 @@ public class TestEventListener implements Listener {
     private static EntityCutRecorder recorder;
     
     private static final List<Vec2d> nodes = new ArrayList<>();
+    
+    private static BezierCurve3D endCurve = null;
     
     static {
         movie = new Movie();
@@ -104,9 +108,75 @@ public class TestEventListener implements Listener {
     
         if(itemStack.getType() == Material.LAPIS_LAZULI){
             Location loc = player.getLocation();
+            
+            if(endCurve == null){
+                endCurve = new BezierCurve3D(loc.toVector(), loc.toVector().add(new Vector(0.1, 0.1, 0.1)));
+                
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        
+                        if(player.getInventory().getItemInMainHand().getType() != Material.LAPIS_LAZULI) return;
+                        
+                        Location location = player.getLocation();
+                        endCurve.moveEndAnchorToExperiment(location.getX(), location.getY(), location.getZ());
+                        
+                        BezierCurve3D current = endCurve;
+                        while (true){
     
+                            for(double t = 0.0; t < 1.0; t += 0.025){
+                                Vector pos = current.getPosition(t);
+        
+                                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
+                                player.spawnParticle(Particle.REDSTONE, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0, dustOptions);
+                            }
     
+                            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLUE, 1);
+                            Vector start = current.getStartAnchor();
+                            Vector end = current.getEndAnchor();
+                            Vector startC = current.getStartControl();
+                            Vector endC = current.getEndControl();
+                            player.spawnParticle(Particle.REDSTONE, start.getX(), start.getY(), start.getZ(), 0, 0, 0, 0, dustOptions);
+                            player.spawnParticle(Particle.REDSTONE, end.getX(), end.getY(), end.getZ(), 0, 0, 0, 0, dustOptions);
+                            player.spawnParticle(Particle.REDSTONE, startC.getX(), startC.getY(), startC.getZ(), 0, 0, 0, 0, dustOptions);
+                            player.spawnParticle(Particle.REDSTONE, endC.getX(), endC.getY(), endC.getZ(), 0, 0, 0, 0, dustOptions);
+                            
+                            BezierCurve3D previous = current.getPrevious();
+                            if(previous == null){
+                                break;
+                            }
+                            
+                            current = previous;
+                            
+                        }
+                        
+                        
+                    }
+                }.runTaskTimerAsynchronously(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+            }else{
+                endCurve = endCurve.createNextBezierCurve(player.getLocation().toVector());
+            }
     
+            /*
+            Vector start = loc.toVector();
+            Vector end = start.clone().add(new Vector(10, 10, 10));
+            Vector startC = start.clone().add(new Vector(0, 0, 2));
+            Vector endC = start.clone().add(new Vector(10, 5, 4));
+    
+            BezierCurve3D bezierCurve3D = new BezierCurve3D(start, end, startC, endC);
+            for(double t = 0.0; t < 1.0; t += 0.025){
+                Vector pos = bezierCurve3D.getPosition(t);
+                
+                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
+                player.spawnParticle(Particle.REDSTONE, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0, dustOptions);
+            }
+    
+            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLUE, 1);
+            player.spawnParticle(Particle.REDSTONE, start.getX(), start.getY(), start.getZ(), 0, 0, 0, 0, dustOptions);
+            player.spawnParticle(Particle.REDSTONE, end.getX(), end.getY(), end.getZ(), 0, 0, 0, 0, dustOptions);
+            player.spawnParticle(Particle.REDSTONE, startC.getX(), startC.getY(), startC.getZ(), 0, 0, 0, 0, dustOptions);
+            player.spawnParticle(Particle.REDSTONE, endC.getX(), endC.getY(), endC.getZ(), 0, 0, 0, 0, dustOptions);
+            */
             //Location location = loc.clone().add(x, y, 0.0);
             //Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
             //player.spawnParticle(Particle.REDSTONE, location, 0, 0, 0, 0, dustOptions);

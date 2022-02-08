@@ -6,7 +6,7 @@ import be4rjp.crafterscut.api.nms.INMSHandler;
 import be4rjp.crafterscut.api.nms.entity.IEntityPlayer;
 import be4rjp.crafterscut.api.nms.enums.WrappedPlayerInfoAction;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
-import be4rjp.crafterscut.api.util.Vec2f;
+import be4rjp.crafterscut.api.util.math.Vec2f;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.World;
