@@ -3,6 +3,8 @@ package be4rjp.crafterscut;
 import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.nms.INMSHandler;
 import be4rjp.crafterscut.impl.ImplCraftersCutAPI;
+import be4rjp.crafterscut.listener.PlayerClickListener;
+import be4rjp.crafterscut.listener.PlayerJoinQuitListener;
 import be4rjp.crafterscut.listener.TestEventListener;
 import be4rjp.crafterscut.nms.NMSManager;
 import org.bukkit.Bukkit;
@@ -24,6 +26,8 @@ public final class CraftersCut extends JavaPlugin {
     
         PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new TestEventListener(), this);
+        pluginManager.registerEvents(new PlayerJoinQuitListener(), this);
+        pluginManager.registerEvents(new PlayerClickListener(), this);
     }
 
     @Override

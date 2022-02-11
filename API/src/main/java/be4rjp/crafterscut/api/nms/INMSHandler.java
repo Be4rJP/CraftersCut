@@ -1,5 +1,6 @@
 package be4rjp.crafterscut.api.nms;
 
+import be4rjp.crafterscut.api.gui.map.CanvasBuffer;
 import be4rjp.crafterscut.api.nms.entity.IEntity;
 import be4rjp.crafterscut.api.nms.entity.IEntityLiving;
 import be4rjp.crafterscut.api.nms.entity.IEntityPlayer;
@@ -8,7 +9,10 @@ import io.netty.channel.Channel;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.map.MapCursor;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public interface INMSHandler {
 
@@ -35,5 +39,11 @@ public interface INMSHandler {
     Object createHeadRotationPacket(IEntity iEntity, float yaw);
     
     Object createEntityDestroyPacket(IEntity iEntity);
+    
+    Object createMapPacket(CanvasBuffer canvasBuffer, List<MapCursor> mapCursor);
+    
+    boolean isMapPacket(Object packet);
+    
+    int getMapID(Object packet);
     
 }

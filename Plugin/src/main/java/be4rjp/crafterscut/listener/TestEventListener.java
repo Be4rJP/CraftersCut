@@ -1,9 +1,11 @@
 package be4rjp.crafterscut.listener;
 
+import be4rjp.crafterscut.api.CCPlayer;
 import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.cut.PlayerCut;
 import be4rjp.crafterscut.api.data.movie.Movie;
+import be4rjp.crafterscut.api.gui.map.MovieEditGUIRenderer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.recorder.EntityCutRecorder;
 import be4rjp.crafterscut.api.util.SkinManager;
@@ -19,6 +21,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -156,30 +159,21 @@ public class TestEventListener implements Listener {
             }else{
                 endCurve = endCurve.createNextBezierCurve(player.getLocation().toVector());
             }
+        }
     
-            /*
-            Vector start = loc.toVector();
-            Vector end = start.clone().add(new Vector(10, 10, 10));
-            Vector startC = start.clone().add(new Vector(0, 0, 2));
-            Vector endC = start.clone().add(new Vector(10, 5, 4));
+        if(itemStack.getType() == Material.PAPER){
+            ItemStack item = new ItemStack(Material.FILLED_MAP);
+            MapMeta mapMeta = (MapMeta) item.getItemMeta();
+            mapMeta.setMapId(0);
+            item.setItemMeta(mapMeta);
+            
+            player.getInventory().setItemInMainHand(item);
     
-            BezierCurve3D bezierCurve3D = new BezierCurve3D(start, end, startC, endC);
-            for(double t = 0.0; t < 1.0; t += 0.025){
-                Vector pos = bezierCurve3D.getPosition(t);
-                
-                Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
-                player.spawnParticle(Particle.REDSTONE, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0, 0, dustOptions);
-            }
-    
-            Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLUE, 1);
-            player.spawnParticle(Particle.REDSTONE, start.getX(), start.getY(), start.getZ(), 0, 0, 0, 0, dustOptions);
-            player.spawnParticle(Particle.REDSTONE, end.getX(), end.getY(), end.getZ(), 0, 0, 0, 0, dustOptions);
-            player.spawnParticle(Particle.REDSTONE, startC.getX(), startC.getY(), startC.getZ(), 0, 0, 0, 0, dustOptions);
-            player.spawnParticle(Particle.REDSTONE, endC.getX(), endC.getY(), endC.getZ(), 0, 0, 0, 0, dustOptions);
-            */
-            //Location location = loc.clone().add(x, y, 0.0);
-            //Particle.DustOptions dustOptions = new Particle.DustOptions(Color.RED, 1);
-            //player.spawnParticle(Particle.REDSTONE, location, 0, 0, 0, 0, dustOptions);
+            MovieEditGUIRenderer renderer = new MovieEditGUIRenderer();
+            CCPlayer ccPlayer = CCPlayer.getCCPlayer(player);
+            renderer.addPlayer(ccPlayer);
+            
+            renderer.start();
         }
     }
     

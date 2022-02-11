@@ -6,6 +6,7 @@ import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -31,6 +32,7 @@ public abstract class CraftersCutAPI {
 
     public INMSHandler getNMSHandler() {return nmsHandler;}
 
+    public @Nullable CCPlayer getCCPlayer(Player player){return CCPlayer.getCCPlayer(player);}
 
     public CompletableFuture<MoviePlayer> createMoviePlayerForAsyncThread(Movie movie, Player audience){
         return createMoviePlayerForAsyncThread(movie, audience, null);
