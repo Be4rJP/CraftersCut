@@ -110,4 +110,14 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
             }
         }
     }
+    
+    public static void drawHole(CanvasBuffer canvasBuffer, int startX, int startZ, int endX, int endZ){
+        
+        drawSquare(canvasBuffer, startX, startZ, endX, endZ, (byte) 26);
+        
+        MapGUIRenderer.drawSquare(canvasBuffer, startX, startZ, endX, startZ, (byte) 24);
+        MapGUIRenderer.drawSquare(canvasBuffer, startX, startZ, startX, endZ, (byte) 24);
+        MapGUIRenderer.drawSquare(canvasBuffer, startX, endZ, endX, endZ, (byte) 33);
+        MapGUIRenderer.drawSquare(canvasBuffer, endX, startZ, endX, endZ, (byte) 33);
+    }
 }
