@@ -45,6 +45,9 @@ public class MapButtonComponent extends MapTextComponent{
         
         int endXPixel = startXPixel + width + 3;
         int endZPixel = startZPixel + height + 4;
+    
+        this.width = width + 5;
+        this.height = height + 7;
         
         if(clickRunnable != null) this.boundingBox = new MapComponentBoundingBox(startXPixel, startZPixel, endXPixel, endZPixel);
     }

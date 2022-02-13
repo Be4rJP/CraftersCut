@@ -64,7 +64,15 @@ public class PlayerCursor {
                     
                     if(mapComponent instanceof MapButtonComponent){
                         String popUpText = ((MapButtonComponent) mapComponent).getPopUpText();
-                        if(popUpText != null) addComponent.add(new MapTextComponent(popUpText, true, cursorPixelX, cursorPixelY, null));
+                        if(popUpText != null){
+                            MapTextComponent textComponent = new MapTextComponent(popUpText, true, cursorPixelX, cursorPixelY, null);
+                            float rateX = ((float) cursorPixelX) / 128.0F;
+                            float newX = ((float) textComponent.getWidth()) * rateX;
+                            
+                            textComponent.setX(textComponent.getX() - (int) newX);
+                            
+                            addComponent.add(textComponent);
+                        }
                     }
                 }
             }

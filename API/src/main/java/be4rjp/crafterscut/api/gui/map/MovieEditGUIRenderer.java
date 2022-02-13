@@ -16,12 +16,13 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
     @Override
     public void render(CanvasBuffer canvasBuffer, List<MapComponent> mapComponentList) {
-        MapGUIRenderer.drawSquare(canvasBuffer, 0, 14, 128, 15, (byte) 24);
-        MapGUIRenderer.drawSquare(canvasBuffer, 0, 16, 128, 16, (byte) 116);
+        //MapGUIRenderer.drawSquare(canvasBuffer, 0, 14, 128, 15, (byte) 24);
+        //MapGUIRenderer.drawSquare(canvasBuffer, 0, 16, 128, 16, (byte) 116);
         MapGUIRenderer.drawSquare(canvasBuffer, 0, 30, 128, 31, (byte) 24);
         MapGUIRenderer.drawSquare(canvasBuffer, 0, 32, 128, 32, (byte) 116);
         
-        MapGUIRenderer.drawHole(canvasBuffer, 18, 35, 126, 126);
+        MapGUIRenderer.drawHole(canvasBuffer, 18, 35, 126, 50);
+        MapGUIRenderer.drawHole(canvasBuffer, 18, 51, 126, 126);
         MapGUIRenderer.drawHole(canvasBuffer, 2, 35, 16, 126);
         
         MapGUIRenderer.drawSquare(canvasBuffer, 19, 58, 125, 58, (byte) 87);
@@ -29,6 +30,8 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
         MapGUIRenderer.drawSquare(canvasBuffer, 19, 88, 125, 88, (byte) 87);
         MapGUIRenderer.drawSquare(canvasBuffer, 19, 103, 125, 103, (byte) 87);
         MapGUIRenderer.drawSquare(canvasBuffer, 19, 118, 125, 118, (byte) 87);
+    
+        MapGUIRenderer.drawSquare(canvasBuffer, 34, 52, 34, 125, (byte) 68);
         
         mapComponentList.add(buttonComponent);
     }

@@ -16,6 +16,10 @@ public class MapTextComponent extends MapComponent {
     
     protected MapComponentBoundingBox boundingBox;
     
+    protected int width = 0;
+    
+    protected int height = 0;
+    
     public MapTextComponent(String text, boolean drawGrayBack, int x, int z, MapClickRunnable clickRunnable){
         super(x, z, clickRunnable);
         this.setText(text);
@@ -29,6 +33,10 @@ public class MapTextComponent extends MapComponent {
     public String getRawText() {return rawText;}
     
     public String getText() {return text;}
+    
+    public int getHeight() {return height;}
+    
+    public int getWidth() {return width;}
     
     
     public void setText(String text){
@@ -56,6 +64,9 @@ public class MapTextComponent extends MapComponent {
         
         int endXPixel = startXPixel + width + 1;
         int endZPixel = startZPixel + height + 2;
+        
+        this.width = width + 2;
+        this.height = height + 4;
         
         if(clickRunnable != null) this.boundingBox = new MapComponentBoundingBox(startXPixel, startZPixel, endXPixel, endZPixel);
     }
