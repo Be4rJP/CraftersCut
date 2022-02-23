@@ -1,6 +1,8 @@
 package be4rjp.crafterscut.api.data.cut;
 
 import be4rjp.crafterscut.api.data.DataSerializer;
+import be4rjp.crafterscut.api.editor.cut.CameraCutEditor;
+import be4rjp.crafterscut.api.editor.cut.CutEditor;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.util.math.Vec2f;
@@ -36,6 +38,11 @@ public class CameraCut extends Cut {
     @Override
     public Vec2f getFirstRotation() {
         return null;
+    }
+    
+    @Override
+    protected CutEditor createEditorInstance() {
+        return new CameraCutEditor(this);
     }
     
     @Override

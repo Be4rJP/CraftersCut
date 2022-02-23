@@ -1,11 +1,25 @@
 package be4rjp.crafterscut.api.gui.map;
 
+import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 import be4rjp.crafterscut.api.gui.map.component.MapButtonComponent;
 import be4rjp.crafterscut.api.gui.map.component.MapComponent;
+import be4rjp.crafterscut.api.gui.map.component.MapLaneComponent;
+import be4rjp.crafterscut.api.gui.map.component.TimelineComponent;
 
 import java.util.List;
 
 public class MovieEditGUIRenderer extends MapGUIRenderer{
+    
+    private final MovieEditor movieEditor;
+    
+    private final TimelineComponent timelineComponent;
+    
+    public MovieEditGUIRenderer(MovieEditor movieEditor){
+        this.movieEditor = movieEditor;
+        this.timelineComponent = new TimelineComponent(20, 59, 124, 118, movieEditor);
+    }
+    
+    public MovieEditor getMovieEditor() {return movieEditor;}
     
     private final MapButtonComponent buttonComponent = new MapButtonComponent("§116;Test", "This is test!", true, 64, 64, (ccPlayer, clicked) -> {
         ccPlayer.getPlayer().sendMessage("CLICKED!");
@@ -33,6 +47,8 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
         MapGUIRenderer.drawSquare(canvasBuffer, 34, 52, 34, 125, (byte) 68);
         
-        mapComponentList.add(buttonComponent);
+        timelineComponent.render(canvasBuffer,  mapComponentList);
+        
+        //mapComponentList.add(buttonComponent);
     }
 }

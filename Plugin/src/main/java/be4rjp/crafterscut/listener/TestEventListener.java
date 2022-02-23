@@ -5,6 +5,7 @@ import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.cut.PlayerCut;
 import be4rjp.crafterscut.api.data.movie.Movie;
+import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 import be4rjp.crafterscut.api.gui.map.MovieEditGUIRenderer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.recorder.EntityCutRecorder;
@@ -169,7 +170,7 @@ public class TestEventListener implements Listener {
             
             player.getInventory().setItemInMainHand(item);
     
-            MovieEditGUIRenderer renderer = new MovieEditGUIRenderer();
+            MovieEditGUIRenderer renderer = new MovieEditGUIRenderer(new MovieEditor(movie));
             CCPlayer ccPlayer = CCPlayer.getCCPlayer(player);
             renderer.addPlayer(ccPlayer);
             

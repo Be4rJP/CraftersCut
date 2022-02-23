@@ -1,6 +1,8 @@
 package be4rjp.crafterscut.api.data.cut;
 
 import be4rjp.crafterscut.api.data.DataSerializer;
+import be4rjp.crafterscut.api.editor.cut.CutEditor;
+import be4rjp.crafterscut.api.editor.cut.PlayerCutEditor;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import be4rjp.crafterscut.api.player.cut.PlayerCutPlayer;
@@ -30,6 +32,11 @@ public class PlayerCut extends EntityCut {
     public void setSkinValue(String skinValue) {this.skinValue = skinValue;}
     
     public void setSkinSignature(String skinSignature) {this.skinSignature = skinSignature;}
+    
+    @Override
+    protected CutEditor createEditorInstance() {
+        return new PlayerCutEditor(this);
+    }
     
     @Override
     public CutPlayer<PlayerCut> createCutPlayerInstance(MoviePlayer moviePlayer) {

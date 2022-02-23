@@ -4,6 +4,7 @@ import be4rjp.crafterscut.api.data.SerializableData;
 import be4rjp.crafterscut.api.data.cut.Cut;
 import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.cut.DataType;
+import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ public class Movie implements SerializableData {
     private String worldName;
 
     private final List<Cut> cutList = new ArrayList<>();
+    
+    private final MovieEditor movieEditor = new MovieEditor(this);
 
     public void addCut(Cut cut){cutList.add(cut);}
 
@@ -28,6 +31,8 @@ public class Movie implements SerializableData {
     public void setName(String name) {this.name = name;}
     
     public void setWorldName(String worldName) {this.worldName = worldName;}
+    
+    public MovieEditor getMovieEditor() {return movieEditor;}
     
     @Override
     public DataSerializer serialize() throws Exception {
