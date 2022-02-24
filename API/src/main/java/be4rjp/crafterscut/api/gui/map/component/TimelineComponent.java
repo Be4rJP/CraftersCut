@@ -32,6 +32,14 @@ public class TimelineComponent extends MapComponent{
         this.width = endX - startX;
     }
     
+    public void setCurrentTick(int tick){
+        currentTick = tick;
+        startTick = currentTick - 14;
+        endTick = currentTick + 105;
+    }
+    
+    public int getCurrentTick() {return currentTick;}
+    
     public int getEndX() {return endX;}
     
     public int getEndZ() {return endZ;}
@@ -52,10 +60,10 @@ public class TimelineComponent extends MapComponent{
             
             for(Cut cut : laneList){
                 if(cut.isDuplicate(this)){
-                    int csX = Math.max(this.x, (cut.getStartTick() - currentTick) + this.x + 14);
+                    int csX = Math.max(this.x, (cut.getStartTick() - currentTick) + this.x + 15);
                     int ceX = Math.min(endX, (cut.getEndTick() - (currentTick + 90)) + endZ);
                     
-                    MapLaneComponent laneComponent = new MapLaneComponent("", cut.getName(), true, csX, lane * 15 + 48, ceX - csX, (byte) 20, csX != this.x, ceX != endX, (ccPlayer, mapComponent) -> {
+                    MapLaneComponent laneComponent = new MapLaneComponent("", cut.getName(), true, csX, lane * 16 + 47, ceX - csX, (byte) 20, csX != this.x, ceX != endX, (ccPlayer, mapComponent) -> {
                     
                     });
                     
@@ -63,6 +71,8 @@ public class TimelineComponent extends MapComponent{
                 }
             }
         }
+        
+        
         
     }
     

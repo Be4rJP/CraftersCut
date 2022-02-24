@@ -169,10 +169,9 @@ public class TestEventListener implements Listener {
             item.setItemMeta(mapMeta);
             
             player.getInventory().setItemInMainHand(item);
-    
-            MovieEditGUIRenderer renderer = new MovieEditGUIRenderer(new MovieEditor(movie));
             CCPlayer ccPlayer = CCPlayer.getCCPlayer(player);
-            renderer.addPlayer(ccPlayer);
+    
+            MovieEditGUIRenderer renderer = new MovieEditGUIRenderer(new MovieEditor(movie, ccPlayer));
             
             renderer.start();
         }

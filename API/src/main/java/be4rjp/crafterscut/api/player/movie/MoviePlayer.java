@@ -42,7 +42,7 @@ public class MoviePlayer extends BukkitRunnable {
 
     public Player getAudience() {return audience;}
 
-    public void playTick(int tick){
+    public void playTick(int tick, boolean initialize){
         for(CutPlayer<? extends Cut> cutPlayer : cutPlayerList){
             Cut cut = cutPlayer.getCut();
 
@@ -51,7 +51,11 @@ public class MoviePlayer extends BukkitRunnable {
             if(cut.getStartTick() == tick) cutPlayer.onStart();
             if(cut.getEndTick() == tick) cutPlayer.onEnd();
 
-            cutPlayer.playTick(tick);
+            if(initialize) {
+                cutPlayer.playInitializeTick(tick);
+            }else{
+                cutPlayer.playTick(tick);
+            }
         }
     }
 
@@ -72,13 +76,38 @@ public class MoviePlayer extends BukkitRunnable {
     public void setWorld(@NotNull World world) {this.world = world;}
 
 
+    private boolean paused = false;
+    
+    private boolean reset = false;
+    
+    private boolean autoCancel = true;
+    
+    public boolean isAutoCancel() {return autoCancel;}
+    
+    public void setAutoCancel(boolean autoCancel) {this.autoCancel = autoCancel;}
+    
+    public void pause(){
+        this.paused = true;
+        this.reset = true;
+    }
+    
+    public void restart(){this.paused = false;}
 
     private int tick = 0;
-
+    
+    public void setTick(int tick) {this.tick = tick;}
+    
+    public int getTick() {return tick;}
+    
     @Override
     public void run() {
+        if(paused){
+            return;
+        }
+        
         try{
-            playTick(tick);
+            playTick(tick, reset);
+            reset = false;
         }catch (Exception e){
             if(exceptionConsumer == null){
                 e.printStackTrace();
@@ -91,7 +120,11 @@ public class MoviePlayer extends BukkitRunnable {
 
         if(tick == endTick){
             audience.sendMessage("play end");
-            cancel();
+            if(autoCancel){
+                cancel();
+            }else{
+                paused = true;
+            }
             return;
         }
 

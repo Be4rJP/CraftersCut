@@ -28,5 +28,7 @@ public abstract class CutPlayer<T extends Cut> {
     public abstract void onEnd();
 
     public abstract void playTick(int tick);
+    
+    public abstract void playInitializeTick(int tick);
 
 }

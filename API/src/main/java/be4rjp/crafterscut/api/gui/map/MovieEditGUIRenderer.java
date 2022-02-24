@@ -1,10 +1,12 @@
 package be4rjp.crafterscut.api.gui.map;
 
+import be4rjp.crafterscut.api.CCPlayer;
 import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 import be4rjp.crafterscut.api.gui.map.component.MapButtonComponent;
 import be4rjp.crafterscut.api.gui.map.component.MapComponent;
-import be4rjp.crafterscut.api.gui.map.component.MapLaneComponent;
 import be4rjp.crafterscut.api.gui.map.component.TimelineComponent;
+import be4rjp.crafterscut.api.player.movie.MoviePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -14,9 +16,21 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
     private final TimelineComponent timelineComponent;
     
+    private final MoviePlayer moviePlayer;
+    
     public MovieEditGUIRenderer(MovieEditor movieEditor){
+        super(movieEditor.getPlayer());
         this.movieEditor = movieEditor;
         this.timelineComponent = new TimelineComponent(20, 59, 124, 118, movieEditor);
+        
+        this.moviePlayer = new MoviePlayer(movieEditor.getMovie(), movieEditor.getPlayer().getPlayer(), e -> {/**/});
+    
+        NEXT = new MapButtonComponent("§116;NEXT", "NEXT", true, 19, 36, (ccPlayer, mapComponent) -> {
+            timelineComponent.setCurrentTick(timelineComponent.getCurrentTick() + 1);
+        });
+        BACK = new MapButtonComponent("§116;BACK", "BACK", true, 50, 36, (ccPlayer, mapComponent) -> {
+            timelineComponent.setCurrentTick(timelineComponent.getCurrentTick() - 1);
+        });
     }
     
     public MovieEditor getMovieEditor() {return movieEditor;}
@@ -27,6 +41,15 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
         MapButtonComponent button = (MapButtonComponent) clicked;
         button.setPressed(!button.isPressed());
     });
+    
+    
+    private final MapButtonComponent START_BUTTON = new MapButtonComponent("", "Movie start", true, 19, 36, (ccPlayer, mapComponent) -> {
+    
+    });
+    
+    private final MapButtonComponent NEXT;
+    
+    private final MapButtonComponent BACK;
     
     @Override
     public void render(CanvasBuffer canvasBuffer, List<MapComponent> mapComponentList) {
@@ -40,14 +63,17 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
         MapGUIRenderer.drawHole(canvasBuffer, 2, 35, 16, 126);
         
         MapGUIRenderer.drawSquare(canvasBuffer, 19, 58, 125, 58, (byte) 87);
-        MapGUIRenderer.drawSquare(canvasBuffer, 19, 73, 125, 73, (byte) 87);
-        MapGUIRenderer.drawSquare(canvasBuffer, 19, 88, 125, 88, (byte) 87);
-        MapGUIRenderer.drawSquare(canvasBuffer, 19, 103, 125, 103, (byte) 87);
-        MapGUIRenderer.drawSquare(canvasBuffer, 19, 118, 125, 118, (byte) 87);
+        MapGUIRenderer.drawSquare(canvasBuffer, 19, 74, 125, 74, (byte) 87);
+        MapGUIRenderer.drawSquare(canvasBuffer, 19, 90, 125, 90, (byte) 87);
+        MapGUIRenderer.drawSquare(canvasBuffer, 19, 106, 125, 106, (byte) 87);
+        MapGUIRenderer.drawSquare(canvasBuffer, 19, 122, 125, 122, (byte) 87);
     
         MapGUIRenderer.drawSquare(canvasBuffer, 34, 52, 34, 125, (byte) 68);
         
         timelineComponent.render(canvasBuffer,  mapComponentList);
+        
+        mapComponentList.add(NEXT);
+        mapComponentList.add(BACK);
         
         //mapComponentList.add(buttonComponent);
     }

@@ -5,6 +5,7 @@ import be4rjp.crafterscut.api.data.cut.CameraCut;
 import be4rjp.crafterscut.api.data.cut.Cut;
 import be4rjp.crafterscut.api.data.movie.Movie;
 import be4rjp.crafterscut.api.gui.map.MovieEditGUIRenderer;
+import be4rjp.crafterscut.api.player.movie.MoviePlayer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class MovieEditor {
     
     private final Movie movie;
     
-    private final Set<CCPlayer> players = new HashSet<>();
+    private final CCPlayer ccPlayer;
     
     private final Int2ObjectArrayMap<List<Cut>> cutLaneMap = new Int2ObjectArrayMap<>();
     
@@ -24,8 +25,9 @@ public class MovieEditor {
 
     private MovieEditGUIRenderer renderer;
     
-    public MovieEditor(Movie movie){
+    public MovieEditor(Movie movie, CCPlayer ccPlayer){
         this.movie = movie;
+        this.ccPlayer = ccPlayer;
         
         for(Cut cut : movie.getCutList()){
             if(cut instanceof CameraCut){
@@ -62,23 +64,10 @@ public class MovieEditor {
     
     public void updateMaxLane(int lane){maxLane = Math.max(lane, maxLane);}
     
-    public void addEditPlayer(CCPlayer ccPlayer){
-        players.add(ccPlayer);
-        if(renderer == null){
-            renderer = new MovieEditGUIRenderer(this);
-            renderer.start();
-        }
-        renderer.addPlayer(ccPlayer);
-    }
-    
     public List<Cut> getLaneList(int lane){
         updateMaxLane(lane);
         return cutLaneMap.computeIfAbsent(lane, l -> new ArrayList<>());
     }
     
-    public void removeEditPlayer(CCPlayer ccPlayer){
-        players.remove(ccPlayer);
-        if(renderer != null) renderer.removePlayer(ccPlayer);
-    }
-    
+    public CCPlayer getPlayer() {return ccPlayer;}
 }

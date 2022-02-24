@@ -20,6 +20,13 @@ public class MapLaneComponent extends MapButtonComponent{
         setText(text);
     }
     
+    public boolean isDrawLeft() {return drawLeft;}
+    
+    public boolean isDrawRight() {return drawRight;}
+    
+    public int getLaneWidth() {return laneWidth;}
+    
+    
     @Override
     public void setText(String text){
         this.text = text;
@@ -43,7 +50,7 @@ public class MapLaneComponent extends MapButtonComponent{
         int startXPixel = x - 2;
         int startZPixel = z - 3;
         
-        int endXPixel = startXPixel + this.laneWidth + 3;
+        int endXPixel = startXPixel + this.laneWidth + 4;
         int endZPixel = startZPixel + height + 4;
         
         this.width = this.laneWidth + 5;

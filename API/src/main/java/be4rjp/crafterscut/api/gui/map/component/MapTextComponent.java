@@ -1,11 +1,12 @@
 package be4rjp.crafterscut.api.gui.map.component;
 
 import be4rjp.crafterscut.api.gui.map.CanvasBuffer;
+import be4rjp.crafterscut.api.gui.map.MapGUIRenderer;
 import org.bukkit.map.MinecraftFont;
 
 public class MapTextComponent extends MapComponent {
     
-    protected static final MinecraftFont minecraftFont = new MinecraftFont();
+    protected static final MinecraftFont minecraftFont = MapGUIRenderer.FONT;
     
     
     protected String text;

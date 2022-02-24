@@ -31,7 +31,7 @@ public class PlayerClickListener implements Listener {
         MapGUIRenderer mapGUIRenderer = ccPlayer.getMapGUIRenderer();
         if(mapGUIRenderer == null) return;
         
-        mapGUIRenderer.getPlayerCursor(ccPlayer).onClick();
+        mapGUIRenderer.getPlayerCursor().onClick();
     }
     
 }

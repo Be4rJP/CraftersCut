@@ -1,10 +1,7 @@
 package be4rjp.crafterscut.api.gui.map;
 
 import be4rjp.crafterscut.api.CCPlayer;
-import be4rjp.crafterscut.api.gui.map.component.MapButtonComponent;
-import be4rjp.crafterscut.api.gui.map.component.MapComponent;
-import be4rjp.crafterscut.api.gui.map.component.MapComponentBoundingBox;
-import be4rjp.crafterscut.api.gui.map.component.MapTextComponent;
+import be4rjp.crafterscut.api.gui.map.component.*;
 import org.bukkit.Location;
 import org.bukkit.map.MapCursor;
 
@@ -15,9 +12,7 @@ public class PlayerCursor {
     
     private final CCPlayer ccPlayer;
     
-    public PlayerCursor(CCPlayer ccPlayer){
-        this.ccPlayer = ccPlayer;
-    }
+    public PlayerCursor(CCPlayer ccPlayer){this.ccPlayer = ccPlayer;}
     
     
     private float lastYaw;
@@ -60,7 +55,12 @@ public class PlayerCursor {
                 MapComponentBoundingBox boundingBox = mapComponent.getBoundingBox();
                 if (boundingBox == null) break;
                 if (boundingBox.isInBox(cursorPixelX, cursorPixelY)) {
-                    MapGUIRenderer.drawBoundingBox(mapComponent.getBoundingBox(), canvasBuffer);
+                    if(mapComponent instanceof MapLaneComponent){
+                        MapLaneComponent mapLaneComponent = (MapLaneComponent) mapComponent;
+                        MapGUIRenderer.drawBoundingBox(mapComponent.getBoundingBox(), canvasBuffer, mapLaneComponent.isDrawLeft(), mapLaneComponent.isDrawRight());
+                    }else {
+                        MapGUIRenderer.drawBoundingBox(mapComponent.getBoundingBox(), canvasBuffer);
+                    }
                     
                     if(mapComponent instanceof MapButtonComponent){
                         String popUpText = ((MapButtonComponent) mapComponent).getPopUpText();

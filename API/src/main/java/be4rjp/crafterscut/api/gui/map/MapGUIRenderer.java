@@ -5,7 +5,9 @@ import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.gui.map.component.MapComponent;
 import be4rjp.crafterscut.api.gui.map.component.MapComponentBoundingBox;
 import be4rjp.crafterscut.api.util.math.Vec2f;
+import org.bukkit.entity.Player;
 import org.bukkit.map.MapCursor;
+import org.bukkit.map.MinecraftFont;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
@@ -13,33 +15,34 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class MapGUIRenderer extends BukkitRunnable {
     
+    public static final MinecraftFont FONT = new MinecraftFont();
+    
+    static {
+    
+    }
+    
+    
     protected Object packet;
     
     public Object getPacket() {return packet;}
     
-    protected final Set<CCPlayer> ccPlayers = new HashSet<>();
-    
     protected boolean isShowAllComponent = true;
     
-    public void addPlayer(CCPlayer ccPlayer){
-        ccPlayers.add(ccPlayer);
+    private final CCPlayer ccPlayer;
+    
+    private final PlayerCursor playerCursor;
+    
+    public MapGUIRenderer(CCPlayer ccPlayer){
+        this.ccPlayer = ccPlayer;
+        this.playerCursor = new PlayerCursor(ccPlayer);
         ccPlayer.setMapGUIRenderer(this);
-    }
-    
-    
-    protected Map<CCPlayer, PlayerCursor> cursorMap = new ConcurrentHashMap<>();
-    
-    public PlayerCursor getPlayerCursor(CCPlayer ccPlayer){return cursorMap.computeIfAbsent(ccPlayer, PlayerCursor::new);}
-    
-    public void removePlayer(CCPlayer ccPlayer){
-        ccPlayers.remove(ccPlayer);
-        cursorMap.remove(ccPlayer);
-        ccPlayer.setMapGUIRenderer(null);
     }
     
     public boolean isShowAllComponent() {return isShowAllComponent;}
     
     public void setShowAllComponent(boolean showAllComponent) {isShowAllComponent = showAllComponent;}
+    
+    public PlayerCursor getPlayerCursor() {return playerCursor;}
     
     @Override
     public void run() {
@@ -59,17 +62,14 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
         }
         
         List<MapCursor> mapCursors = new ArrayList<>();
-        for(CCPlayer ccPlayer : ccPlayers){
-            PlayerCursor cursor = getPlayerCursor(ccPlayer);
-            mapCursors.add(cursor.render(mapComponents, addComponent, canvasBuffer, isShowAllComponent));
-        }
+        mapCursors.add(playerCursor.render(mapComponents, addComponent, canvasBuffer, isShowAllComponent));
         
         for(MapComponent mapComponent : addComponent){
             mapComponent.setPixels(canvasBuffer);
         }
         
         packet = CraftersCutAPI.getInstance().getNMSHandler().createMapPacket(canvasBuffer, mapCursors);
-        ccPlayers.forEach(ccPlayer -> ccPlayer.sendPacket(packet));
+        ccPlayer.sendPacket(packet);
     }
     
     public abstract void render(CanvasBuffer canvasBuffer, List<MapComponent> mapComponentList);
@@ -87,6 +87,17 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
         drawLine(canvasBuffer, new Vec2f(boundingBox.minX - 1, boundingBox.minY - 1), new Vec2f(boundingBox.minX - 1, boundingBox.maxY + 1), (byte) 116);
         drawLine(canvasBuffer, new Vec2f(boundingBox.maxX + 1, boundingBox.minY - 1), new Vec2f(boundingBox.maxX + 1, boundingBox.maxY + 1), (byte) 116);
         drawLine(canvasBuffer, new Vec2f(boundingBox.minX - 1, boundingBox.maxY + 1), new Vec2f(boundingBox.maxX + 1, boundingBox.maxY + 1), (byte) 116);
+    }
+    
+    public static void drawBoundingBox(MapComponentBoundingBox boundingBox, CanvasBuffer canvasBuffer, boolean drawLeft, boolean drawRight){
+        drawLine(canvasBuffer, new Vec2f(boundingBox.minX, boundingBox.minY), new Vec2f(boundingBox.maxX, boundingBox.minY), (byte) 57);
+        if(drawLeft) drawLine(canvasBuffer, new Vec2f(boundingBox.minX, boundingBox.minY), new Vec2f(boundingBox.minX, boundingBox.maxY), (byte) 57);
+        if(drawRight) drawLine(canvasBuffer, new Vec2f(boundingBox.maxX, boundingBox.minY), new Vec2f(boundingBox.maxX, boundingBox.maxY), (byte) 57);
+        drawLine(canvasBuffer, new Vec2f(boundingBox.minX, boundingBox.maxY), new Vec2f(boundingBox.maxX, boundingBox.maxY), (byte) 57);
+        drawLine(canvasBuffer, new Vec2f(boundingBox.minX, boundingBox.minY - 1), new Vec2f(boundingBox.maxX, boundingBox.minY - 1), (byte) 116);
+        if(drawLeft) drawLine(canvasBuffer, new Vec2f(boundingBox.minX - 1, boundingBox.minY - 1), new Vec2f(boundingBox.minX - 1, boundingBox.maxY + 1), (byte) 116);
+        if(drawRight) drawLine(canvasBuffer, new Vec2f(boundingBox.maxX + 1, boundingBox.minY - 1), new Vec2f(boundingBox.maxX + 1, boundingBox.maxY + 1), (byte) 116);
+        drawLine(canvasBuffer, new Vec2f(boundingBox.minX, boundingBox.maxY + 1), new Vec2f(boundingBox.maxX, boundingBox.maxY + 1), (byte) 116);
     }
     
     public static void drawLine(CanvasBuffer canvasBuffer, Vec2f start, Vec2f end, byte color){

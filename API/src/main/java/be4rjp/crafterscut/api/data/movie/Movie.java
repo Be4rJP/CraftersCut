@@ -17,8 +17,6 @@ public class Movie implements SerializableData {
     private String worldName;
 
     private final List<Cut> cutList = new ArrayList<>();
-    
-    private final MovieEditor movieEditor = new MovieEditor(this);
 
     public void addCut(Cut cut){cutList.add(cut);}
 
@@ -31,8 +29,6 @@ public class Movie implements SerializableData {
     public void setName(String name) {this.name = name;}
     
     public void setWorldName(String worldName) {this.worldName = worldName;}
-    
-    public MovieEditor getMovieEditor() {return movieEditor;}
     
     @Override
     public DataSerializer serialize() throws Exception {

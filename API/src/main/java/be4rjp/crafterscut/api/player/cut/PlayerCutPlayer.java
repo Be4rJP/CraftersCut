@@ -78,17 +78,7 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
         Player audience = moviePlayer.getAudience();
         
         if(tick % 60 == 0) {
-            Vector position = cut.getTickPosition(tick);
-            Vec2f rotation = cut.getTickRotation(tick);
-            if(position != null && rotation != null){
-                entityPlayer.setPositionRotationRaw(position.getX(), position.getY(), position.getZ(), rotation.x, rotation.y);
-                Object teleportPacket = nmsHandler.createTeleportPacket(entityPlayer);
-                Object moveLookPacket = nmsHandler.createRelEntityMoveLookPacket(entityPlayer, 0.0, 0.0, 0.0, rotation.x, rotation.y);
-                Object headPacket = nmsHandler.createHeadRotationPacket(entityPlayer, rotation.x);
-                nmsHandler.sendPacket(audience, teleportPacket);
-                nmsHandler.sendPacket(audience, moveLookPacket);
-                nmsHandler.sendPacket(audience, headPacket);
-            }
+            playInitializeTick(tick);
         } else {
             Vector delta = cut.getTickPositionDelta(tick);
             Vec2f rotation = cut.getTickRotation(tick);
@@ -100,4 +90,24 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
             }
         }
     }
+    
+    @Override
+    public void playInitializeTick(int tick) {
+        INMSHandler nmsHandler = CraftersCutAPI.getInstance().getNMSHandler();
+        Player audience = moviePlayer.getAudience();
+    
+        Vector position = cut.getTickPosition(tick);
+        Vec2f rotation = cut.getTickRotation(tick);
+        if(position != null && rotation != null){
+            entityPlayer.setPositionRotationRaw(position.getX(), position.getY(), position.getZ(), rotation.x, rotation.y);
+            Object teleportPacket = nmsHandler.createTeleportPacket(entityPlayer);
+            Object moveLookPacket = nmsHandler.createRelEntityMoveLookPacket(entityPlayer, 0.0, 0.0, 0.0, rotation.x, rotation.y);
+            Object headPacket = nmsHandler.createHeadRotationPacket(entityPlayer, rotation.x);
+            nmsHandler.sendPacket(audience, teleportPacket);
+            nmsHandler.sendPacket(audience, moveLookPacket);
+            nmsHandler.sendPacket(audience, headPacket);
+        }
+    }
+    
+    
 }
