@@ -63,7 +63,7 @@ public class TimelineComponent extends MapComponent{
                     int csX = Math.max(this.x, (cut.getStartTick() - currentTick) + this.x + 15);
                     int ceX = Math.min(endX, (cut.getEndTick() - (currentTick + 90)) + endZ);
                     
-                    MapLaneComponent laneComponent = new MapLaneComponent("", cut.getName(), true, csX, lane * 16 + 47, ceX - csX, (byte) 20, csX != this.x, ceX != endX, (ccPlayer, mapComponent) -> {
+                    MapLaneComponent laneComponent = new MapLaneComponent("", cut.getName(), true, csX, lane * 16 + 47, ceX - csX, (byte) 20, csX != this.x, ceX != endX && 16 < ceX, (ccPlayer, mapComponent) -> {
                     
                     });
                     

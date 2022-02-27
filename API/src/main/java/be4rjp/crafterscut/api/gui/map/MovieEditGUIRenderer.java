@@ -1,12 +1,10 @@
 package be4rjp.crafterscut.api.gui.map;
 
-import be4rjp.crafterscut.api.CCPlayer;
 import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 import be4rjp.crafterscut.api.gui.map.component.MapButtonComponent;
 import be4rjp.crafterscut.api.gui.map.component.MapComponent;
 import be4rjp.crafterscut.api.gui.map.component.TimelineComponent;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -23,13 +21,28 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
         this.movieEditor = movieEditor;
         this.timelineComponent = new TimelineComponent(20, 59, 124, 118, movieEditor);
         
-        this.moviePlayer = new MoviePlayer(movieEditor.getMovie(), movieEditor.getPlayer().getPlayer(), e -> {/**/});
+        this.moviePlayer = new MoviePlayer(movieEditor.getMovie(), movieEditor.getPlayer(), e -> {/**/});
+        moviePlayer.setAutoCancel(false);
     
-        NEXT = new MapButtonComponent("§116;NEXT", "NEXT", true, 19, 36, (ccPlayer, mapComponent) -> {
-            timelineComponent.setCurrentTick(timelineComponent.getCurrentTick() + 1);
+        NEXT = new MapButtonComponent("§116;N", "NEXT", true, 19, 39, (ccPlayer, mapComponent) -> {
+            int tick = timelineComponent.getCurrentTick() + 1;
+            timelineComponent.setCurrentTick(tick);
+            moviePlayer.setTick(tick);
         });
-        BACK = new MapButtonComponent("§116;BACK", "BACK", true, 50, 36, (ccPlayer, mapComponent) -> {
-            timelineComponent.setCurrentTick(timelineComponent.getCurrentTick() - 1);
+        BACK = new MapButtonComponent("§116;B", "BACK", true, 35, 39, (ccPlayer, mapComponent) -> {
+            int tick = timelineComponent.getCurrentTick() - 1;
+            timelineComponent.setCurrentTick(tick);
+            moviePlayer.setTick(tick);
+        });
+    
+        START = new MapButtonComponent("§116;S", "START", true, 50, 39, (ccPlayer, mapComponent) -> {
+            moviePlayer.initializeAtMainThread();
+            moviePlayer.runAtAsyncThread();
+            moviePlayer.restart();
+        });
+    
+        PAUSE = new MapButtonComponent("§116;P", "PAUSE", true, 65, 39, (ccPlayer, mapComponent) -> {
+            moviePlayer.pause();
         });
     }
     
@@ -51,6 +64,10 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
     private final MapButtonComponent BACK;
     
+    private final MapButtonComponent START;
+    
+    private final MapButtonComponent PAUSE;
+    
     @Override
     public void render(CanvasBuffer canvasBuffer, List<MapComponent> mapComponentList) {
         //MapGUIRenderer.drawSquare(canvasBuffer, 0, 14, 128, 15, (byte) 24);
@@ -70,10 +87,16 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
         MapGUIRenderer.drawSquare(canvasBuffer, 34, 52, 34, 125, (byte) 68);
         
+        timelineComponent.setCurrentTick(moviePlayer.getTick());
+        
         timelineComponent.render(canvasBuffer,  mapComponentList);
         
         mapComponentList.add(NEXT);
         mapComponentList.add(BACK);
+        mapComponentList.add(START);
+        mapComponentList.add(PAUSE);
+        
+        
         
         //mapComponentList.add(buttonComponent);
     }

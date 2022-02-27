@@ -34,27 +34,11 @@ public abstract class CraftersCutAPI {
 
     public @Nullable CCPlayer getCCPlayer(Player player){return CCPlayer.getCCPlayer(player);}
 
-    public CompletableFuture<MoviePlayer> createMoviePlayerForAsyncThread(Movie movie, Player audience){
-        return createMoviePlayerForAsyncThread(movie, audience, null);
-    }
-
-    public CompletableFuture<MoviePlayer> createMoviePlayerForAsyncThread(Movie movie, Player audience, Consumer<Exception> exceptionConsumer){
-        CompletableFuture<MoviePlayer> completableFuture = new CompletableFuture<>();
-        MoviePlayer moviePlayer = new MoviePlayer(movie, audience, exceptionConsumer);
-
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            moviePlayer.initializeAtMainThread();
-            completableFuture.complete(moviePlayer);
-        });
-
-        return completableFuture;
-    }
-
-    public MoviePlayer createMoviePlayer(Movie movie, Player audience){
+    public MoviePlayer createMoviePlayer(Movie movie, CCPlayer audience){
         return createMoviePlayer(movie, audience, null);
     }
 
-    public MoviePlayer createMoviePlayer(Movie movie, Player audience, Consumer<Exception> exceptionConsumer){
+    public MoviePlayer createMoviePlayer(Movie movie, CCPlayer audience, Consumer<Exception> exceptionConsumer){
         if(!Bukkit.isPrimaryThread()) throw new IllegalStateException("DO NOT CALL FROM ASYNC THREAD!");
 
         MoviePlayer moviePlayer = new MoviePlayer(movie, audience, exceptionConsumer);

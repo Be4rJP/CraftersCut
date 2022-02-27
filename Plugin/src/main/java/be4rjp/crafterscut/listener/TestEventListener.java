@@ -80,7 +80,7 @@ public class TestEventListener implements Listener {
         }
         
         if(itemStack.getType() == Material.DIAMOND){
-            MoviePlayer moviePlayer = api.createMoviePlayer(movie, player);
+            MoviePlayer moviePlayer = api.createMoviePlayer(movie, CCPlayer.getCCPlayer(player));
             moviePlayer.runAtAsyncThread();
         }
     

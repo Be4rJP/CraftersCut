@@ -64,7 +64,7 @@ public class MapLaneComponent extends MapButtonComponent{
         if(drawGrayBack) {
             int height = minecraftFont.getHeight();
     
-            int startXPixel = x - 2;
+            int startXPixel = x - 1;
             int startZPixel = z - 3;
     
             int endXPixel = startXPixel + laneWidth + 3;

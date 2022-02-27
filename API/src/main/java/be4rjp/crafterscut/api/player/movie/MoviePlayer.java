@@ -1,12 +1,12 @@
 package be4rjp.crafterscut.api.player.movie;
 
+import be4rjp.crafterscut.api.CCPlayer;
 import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.data.cut.Cut;
 import be4rjp.crafterscut.api.data.movie.Movie;
 import be4rjp.crafterscut.api.player.cut.CutPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 public class MoviePlayer extends BukkitRunnable {
 
     private final Movie movie;
-    private final Player audience;
+    private final CCPlayer audience;
     private final Consumer<Exception> exceptionConsumer;
 
     private World world;
@@ -26,7 +26,7 @@ public class MoviePlayer extends BukkitRunnable {
 
     private int endTick = 0;
 
-    public MoviePlayer(Movie movie, Player audience, Consumer<Exception> exceptionConsumer) {
+    public MoviePlayer(Movie movie, CCPlayer audience, Consumer<Exception> exceptionConsumer) {
         this.movie = movie;
         this.audience = audience;
         this.exceptionConsumer = exceptionConsumer;
@@ -40,7 +40,7 @@ public class MoviePlayer extends BukkitRunnable {
 
     public Movie getMovie() {return movie;}
 
-    public Player getAudience() {return audience;}
+    public CCPlayer getAudience() {return audience;}
 
     public void playTick(int tick, boolean initialize){
         for(CutPlayer<? extends Cut> cutPlayer : cutPlayerList){
@@ -58,14 +58,20 @@ public class MoviePlayer extends BukkitRunnable {
             }
         }
     }
+    
+    private boolean initialized = false;
 
-    public void initializeAtMainThread() {
-        if(!Bukkit.isPrimaryThread()) throw new IllegalStateException("DO NOT CALL FROM ASYNC THREAD!");
-
-        this.world = Bukkit.getWorld(movie.getWorldName());
-        if(world == null) throw new IllegalStateException("WORLD '" + movie.getWorldName() + "' IS NOT LOADED!");
-
-        cutPlayerList.forEach(CutPlayer::initializeAtMainThread);
+    public synchronized void initializeAtMainThread() {
+        if(!initialized) {
+            if (!Bukkit.isPrimaryThread()) throw new IllegalStateException("DO NOT CALL FROM ASYNC THREAD!");
+    
+            this.world = Bukkit.getWorld(movie.getWorldName());
+            if (world == null) throw new IllegalStateException("WORLD '" + movie.getWorldName() + "' IS NOT LOADED!");
+    
+            cutPlayerList.forEach(CutPlayer::initializeAtMainThread);
+            
+            initialized = true;
+        }
     }
 
     public @NotNull World getWorld() {
@@ -119,23 +125,31 @@ public class MoviePlayer extends BukkitRunnable {
         }
 
         if(tick == endTick){
-            audience.sendMessage("play end");
+            audience.getPlayer().sendMessage("play end");
             if(autoCancel){
                 cancel();
             }else{
-                paused = true;
+                pause();
             }
             return;
         }
 
         tick++;
     }
+    
+    private boolean started = false;
 
-    public void runAtMainThread(){
-        super.runTaskTimer(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+    public synchronized void runAtMainThread(){
+        if(!started) {
+            super.runTaskTimer(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+            started = true;
+        }
     }
 
-    public void runAtAsyncThread(){
-        super.runTaskTimerAsynchronously(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+    public synchronized void runAtAsyncThread(){
+        if(!started) {
+            super.runTaskTimerAsynchronously(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+            started = true;
+        }
     }
 }

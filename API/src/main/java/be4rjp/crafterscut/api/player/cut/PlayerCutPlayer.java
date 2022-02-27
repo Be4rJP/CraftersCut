@@ -53,7 +53,7 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
     @Override
     public void onStart() {
         INMSHandler nmsHandler = CraftersCutAPI.getInstance().getNMSHandler();
-        Player audience = moviePlayer.getAudience();
+        Player audience = moviePlayer.getAudience().getPlayer();
         Object infoPacket = nmsHandler.createPlayerInfoPacket(entityPlayer, WrappedPlayerInfoAction.ADD_PLAYER);
         Object spawnPacket = nmsHandler.createSpawnNamedEntityPacket(entityPlayer);
         
@@ -64,7 +64,7 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
     @Override
     public void onEnd() {
         INMSHandler nmsHandler = CraftersCutAPI.getInstance().getNMSHandler();
-        Player audience = moviePlayer.getAudience();
+        Player audience = moviePlayer.getAudience().getPlayer();
         Object removePacket = nmsHandler.createEntityDestroyPacket(entityPlayer);
         Object infoPacket = nmsHandler.createPlayerInfoPacket(entityPlayer, WrappedPlayerInfoAction.REMOVE_PLAYER);
         
@@ -75,7 +75,7 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
     @Override
     public void playTick(int tick) {
         INMSHandler nmsHandler = CraftersCutAPI.getInstance().getNMSHandler();
-        Player audience = moviePlayer.getAudience();
+        Player audience = moviePlayer.getAudience().getPlayer();
         
         if(tick % 60 == 0) {
             playInitializeTick(tick);
@@ -94,7 +94,7 @@ public class PlayerCutPlayer extends CutPlayer<PlayerCut> {
     @Override
     public void playInitializeTick(int tick) {
         INMSHandler nmsHandler = CraftersCutAPI.getInstance().getNMSHandler();
-        Player audience = moviePlayer.getAudience();
+        Player audience = moviePlayer.getAudience().getPlayer();
     
         Vector position = cut.getTickPosition(tick);
         Vec2f rotation = cut.getTickRotation(tick);
