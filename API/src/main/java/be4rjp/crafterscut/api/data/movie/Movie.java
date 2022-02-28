@@ -4,7 +4,6 @@ import be4rjp.crafterscut.api.data.SerializableData;
 import be4rjp.crafterscut.api.data.cut.Cut;
 import be4rjp.crafterscut.api.data.DataSerializer;
 import be4rjp.crafterscut.api.data.cut.DataType;
-import be4rjp.crafterscut.api.editor.movie.MovieEditor;
 
 import java.util.ArrayList;
 import java.util.List;

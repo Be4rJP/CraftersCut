@@ -14,7 +14,7 @@ public class TimelineComponent extends MapComponent{
     
     private final int width;
     
-    private final MovieEditor movieEditor;
+    private MovieEditor movieEditor;
     
     private final List<MapComponent> currentLineComponents = new ArrayList<>();
     

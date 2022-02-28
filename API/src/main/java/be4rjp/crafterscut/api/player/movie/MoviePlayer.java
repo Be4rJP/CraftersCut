@@ -59,6 +59,10 @@ public class MoviePlayer extends BukkitRunnable {
         }
     }
     
+    public void playOnStart(){cutPlayerList.forEach(CutPlayer::onStart);}
+    
+    public void playOnEnd(){cutPlayerList.forEach(CutPlayer::onEnd);}
+    
     private boolean initialized = false;
 
     public synchronized void initializeAtMainThread() {

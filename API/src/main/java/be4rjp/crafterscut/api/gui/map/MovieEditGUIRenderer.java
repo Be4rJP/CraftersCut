@@ -14,7 +14,7 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
     
     private final TimelineComponent timelineComponent;
     
-    private final MoviePlayer moviePlayer;
+    private MoviePlayer moviePlayer;
     
     public MovieEditGUIRenderer(MovieEditor movieEditor){
         super(movieEditor.getPlayer());
@@ -36,6 +36,15 @@ public class MovieEditGUIRenderer extends MapGUIRenderer{
         });
     
         START = new MapButtonComponent("§116;S", "START", true, 50, 39, (ccPlayer, mapComponent) -> {
+            /*
+            try{
+                if(!moviePlayer.isCancelled()) {
+                    moviePlayer.cancel();
+                    moviePlayer.playOnEnd();
+                    moviePlayer = new MoviePlayer(movieEditor.getMovie(), ccPlayer, e -> {});
+                }
+            }catch (Exception e){e.printStackTrace();}*/
+            
             moviePlayer.initializeAtMainThread();
             moviePlayer.runAtAsyncThread();
             moviePlayer.restart();
