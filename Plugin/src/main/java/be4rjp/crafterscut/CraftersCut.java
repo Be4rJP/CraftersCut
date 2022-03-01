@@ -3,6 +3,7 @@ package be4rjp.crafterscut;
 import be4rjp.crafterscut.api.CraftersCutAPI;
 import be4rjp.crafterscut.api.nms.INMSHandler;
 import be4rjp.crafterscut.impl.ImplCraftersCutAPI;
+import be4rjp.crafterscut.listener.ItemClickListener;
 import be4rjp.crafterscut.listener.PlayerClickListener;
 import be4rjp.crafterscut.listener.PlayerJoinQuitListener;
 import be4rjp.crafterscut.listener.TestEventListener;
@@ -28,6 +29,7 @@ public final class CraftersCut extends JavaPlugin {
         pluginManager.registerEvents(new TestEventListener(), this);
         pluginManager.registerEvents(new PlayerJoinQuitListener(), this);
         pluginManager.registerEvents(new PlayerClickListener(), this);
+        pluginManager.registerEvents(new ItemClickListener(), this);
     }
 
     @Override

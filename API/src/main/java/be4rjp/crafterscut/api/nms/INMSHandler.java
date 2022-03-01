@@ -9,6 +9,7 @@ import io.netty.channel.Channel;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapCursor;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,5 +46,9 @@ public interface INMSHandler {
     boolean isMapPacket(Object packet);
     
     int getMapID(Object packet);
+    
+    String getItemNBTString(ItemStack itemStack, String key);
+    
+    ItemStack setItemNBTString(ItemStack itemStack, String key, String value);
     
 }

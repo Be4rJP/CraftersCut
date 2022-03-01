@@ -12,7 +12,12 @@ public class PlayerCursor {
     
     private final CCPlayer ccPlayer;
     
-    public PlayerCursor(CCPlayer ccPlayer){this.ccPlayer = ccPlayer;}
+    private final MapGUIRenderer mapGUIRenderer;
+    
+    public PlayerCursor(CCPlayer ccPlayer, MapGUIRenderer mapGUIRenderer){
+        this.ccPlayer = ccPlayer;
+        this.mapGUIRenderer = mapGUIRenderer;
+    }
     
     
     private float lastYaw;
@@ -88,6 +93,15 @@ public class PlayerCursor {
                 if (boundingBox == null) break;
                 if (boundingBox.isInBox(cursorPixelX, cursorPixelY)) {
                     mapComponent.onClick(ccPlayer);
+                }
+                
+                if(mapComponent instanceof MapLaneComponent){
+                    MapLaneComponent mapLaneComponent = (MapLaneComponent) mapComponent;
+                    isShowAllComponent = false;
+                    mapGUIRenderer.setSelectedLaneComponent(mapLaneComponent);
+                }else{
+                    isShowAllComponent = true;
+                    mapGUIRenderer.setSelectedLaneComponent(null);
                 }
             }
         }

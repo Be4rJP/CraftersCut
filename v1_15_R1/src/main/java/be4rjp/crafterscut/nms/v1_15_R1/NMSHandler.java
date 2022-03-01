@@ -14,9 +14,11 @@ import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_15_R1.util.CraftChatMessage;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapCursor;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,6 +133,22 @@ public class NMSHandler implements INMSHandler {
         }catch (Exception e){e.printStackTrace();}
         
         return 0;
+    }
+    
+    @Override
+    public String getItemNBTString(ItemStack itemStack, String key) {
+        net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tagCompound = nmsItem.getOrCreateTag();
+        return tagCompound.getString(key);
+    }
+    
+    @Override
+    public ItemStack setItemNBTString(ItemStack itemStack, String key, String value) {
+        net.minecraft.server.v1_15_R1.ItemStack nmsItem = CraftItemStack.asNMSCopy(itemStack);
+        NBTTagCompound tagCompound = nmsItem.getOrCreateTag();
+        tagCompound.setString(key, value);
+        nmsItem.setTag(tagCompound);
+        return CraftItemStack.asBukkitCopy(nmsItem);
     }
     
 }

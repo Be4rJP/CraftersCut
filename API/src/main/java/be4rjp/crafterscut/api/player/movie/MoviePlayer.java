@@ -96,6 +96,8 @@ public class MoviePlayer extends BukkitRunnable {
     
     public void setAutoCancel(boolean autoCancel) {this.autoCancel = autoCancel;}
     
+    public boolean isPaused() {return paused;}
+    
     public void pause(){
         this.paused = true;
         this.reset = true;

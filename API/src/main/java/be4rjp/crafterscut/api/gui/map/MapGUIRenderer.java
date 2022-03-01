@@ -2,18 +2,18 @@ package be4rjp.crafterscut.api.gui.map;
 
 import be4rjp.crafterscut.api.CCPlayer;
 import be4rjp.crafterscut.api.CraftersCutAPI;
+import be4rjp.crafterscut.api.editor.ItemClickBase;
 import be4rjp.crafterscut.api.gui.map.component.MapComponent;
 import be4rjp.crafterscut.api.gui.map.component.MapComponentBoundingBox;
+import be4rjp.crafterscut.api.gui.map.component.MapLaneComponent;
 import be4rjp.crafterscut.api.util.math.Vec2f;
-import org.bukkit.entity.Player;
 import org.bukkit.map.MapCursor;
 import org.bukkit.map.MinecraftFont;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class MapGUIRenderer extends BukkitRunnable {
+public abstract class MapGUIRenderer extends BukkitRunnable implements ItemClickBase {
     
     public static final MinecraftFont FONT = new MinecraftFont();
     
@@ -32,9 +32,15 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
     
     private final PlayerCursor playerCursor;
     
+    protected boolean canClick = true;
+    
+    protected MapLaneComponent selectedLaneComponent = null;
+    
+    protected boolean isMovingComponent = false;
+    
     public MapGUIRenderer(CCPlayer ccPlayer){
         this.ccPlayer = ccPlayer;
-        this.playerCursor = new PlayerCursor(ccPlayer);
+        this.playerCursor = new PlayerCursor(ccPlayer, this);
         ccPlayer.setMapGUIRenderer(this);
     }
     
@@ -43,6 +49,18 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
     public void setShowAllComponent(boolean showAllComponent) {isShowAllComponent = showAllComponent;}
     
     public PlayerCursor getPlayerCursor() {return playerCursor;}
+    
+    public boolean isCanClick() {return canClick;}
+    
+    public void setCanClick(boolean canClick) {this.canClick = canClick;}
+    
+    public MapLaneComponent getSelectedLaneComponent() {return selectedLaneComponent;}
+    
+    public void setSelectedLaneComponent(MapLaneComponent selectedLaneComponent) {this.selectedLaneComponent = selectedLaneComponent;}
+    
+    public boolean isMovingComponent() {return isMovingComponent;}
+    
+    public void setMovingComponent(boolean movingComponent) {isMovingComponent = movingComponent;}
     
     @Override
     public void run() {
@@ -74,7 +92,10 @@ public abstract class MapGUIRenderer extends BukkitRunnable {
     
     public abstract void render(CanvasBuffer canvasBuffer, List<MapComponent> mapComponentList);
     
-    public void start(){this.runTaskTimerAsynchronously(CraftersCutAPI.getInstance().getPlugin(), 0, 1);}
+    public void start(){
+        setItems(ccPlayer);
+        this.runTaskTimerAsynchronously(CraftersCutAPI.getInstance().getPlugin(), 0, 1);
+    }
     
     
     

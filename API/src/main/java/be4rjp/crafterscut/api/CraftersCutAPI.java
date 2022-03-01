@@ -1,5 +1,6 @@
 package be4rjp.crafterscut.api;
 
+import be4rjp.artgui.ArtGUI;
 import be4rjp.crafterscut.api.data.movie.Movie;
 import be4rjp.crafterscut.api.nms.INMSHandler;
 import be4rjp.crafterscut.api.player.movie.MoviePlayer;
@@ -8,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public abstract class CraftersCutAPI {
@@ -22,16 +22,21 @@ public abstract class CraftersCutAPI {
 
     protected final INMSHandler nmsHandler;
     
+    protected final ArtGUI artGUI;
+    
     public CraftersCutAPI(Plugin plugin, INMSHandler nmsHandler) {
         this.plugin = plugin;
         this.nmsHandler = nmsHandler;
+        this.artGUI = new ArtGUI(plugin);
     }
     
     
     public Plugin getPlugin() {return plugin;}
 
     public INMSHandler getNMSHandler() {return nmsHandler;}
-
+    
+    public ArtGUI getArtGUI() {return artGUI;}
+    
     public @Nullable CCPlayer getCCPlayer(Player player){return CCPlayer.getCCPlayer(player);}
 
     public MoviePlayer createMoviePlayer(Movie movie, CCPlayer audience){
